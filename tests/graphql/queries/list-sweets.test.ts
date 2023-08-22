@@ -1,16 +1,21 @@
 import gql from "gql-tag";
 import { request } from "../../utils";
 
-const query = gql`
-  query {
-    listSweets {
-      ping
-    }
-  }
-`;
-
 describe("Query listSweets", () => {
-  test("should return true on ping", async () => {
+  test("should return list of hardcoded sweets", async () => {
+    const query = gql`
+      query {
+        listSweets {
+          sweets {
+            name
+            ingredients
+            price
+            quantityInStock
+          }
+        }
+      }
+    `;
+
     const response = await request()
       .post("/graphql")
       .send({ query })
@@ -19,6 +24,19 @@ describe("Query listSweets", () => {
     const body = await response.body;
     expect(body.errors).toBeUndefined();
 
-    expect(body.data.listSweets.ping).toEqual(true);
+    expect(body.data.listSweets.sweets).toEqual([
+      {
+        name: "Chocolate Cake",
+        ingredients: ["chocolate", "flour", "eggs", "sugar"],
+        price: 10,
+        quantityInStock: 10,
+      },
+      {
+        name: "Vanilla Cake",
+        ingredients: ["vanilla", "flour", "eggs", "sugar"],
+        price: 10,
+        quantityInStock: 10,
+      },
+    ]);
   });
 });
