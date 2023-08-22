@@ -9,3 +9,5 @@ export const NEO4J_USER = process.env.NEO4J_USER || "neo4j";
 
 export const NEO4J_PASSWORD =
   process.env.NEO4J_PASSWORD || "super-strong-password-123";
+
+export const NODE_ENV = process.env.NODE_ENV;
