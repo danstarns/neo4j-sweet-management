@@ -1,14 +1,14 @@
 import { builder } from "../schema";
 
 export type ListSweetsResponseType = {
-  pong: boolean;
+  ping: boolean;
 };
 
 export const ListSweetsResponseObject = builder.objectType(
   "ListSweetsResponseType",
   {
     fields: (t) => ({
-      pong: t.exposeBoolean("pong", {}),
+      ping: t.exposeBoolean("ping", {}),
     }),
   }
 );
@@ -18,7 +18,7 @@ builder.queryField("listSweets", (t) =>
     type: ListSweetsResponseObject,
     resolve: () => {
       return {
-        pong: true,
+        ping: true,
       };
     },
   })
