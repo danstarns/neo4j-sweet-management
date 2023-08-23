@@ -1,4 +1,4 @@
-import { Order, OrderStatusEnum } from "../../models/order";
+import { Order } from "../../models/order";
 import { Sweet } from "../../models/sweet";
 import { builder } from "../schema";
 
@@ -57,9 +57,10 @@ builder.mutationField("addSweetToOrder", (t) =>
       }
 
       await Sweet.connect({
-        from: sweets[0],
-        to: orders[0],
+        sweet: sweets[0],
+        node: orders[0],
         type: "CONTAINS",
+        direction: "in",
       });
 
       return {

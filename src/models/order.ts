@@ -23,9 +23,15 @@ export class Order implements z.infer<typeof OrderSchema> {
     this.status = status;
   }
 
-  public static async find({ orderId }: { orderId: string }): Promise<Order[]> {
+  public static async find(where?: {
+    orderId?: string;
+    sweetName?: string;
+  }): Promise<Order[]> {
     const query = `
-        MATCH (o:Order {orderId: $orderId})
+        MATCH (o:Order)${
+          where?.sweetName ? `-[:CONTAINS]->(s:Sweet {name: $sweetName})` : ""
+        }
+        ${where?.orderId ? `WHERE o.orderId = $orderId` : ""}
         RETURN {
             orderId: o.orderId,
             customerName: o.customerName,
@@ -33,9 +39,7 @@ export class Order implements z.infer<typeof OrderSchema> {
         }
     `;
 
-    const result = await neo4j.driver.executeQuery(query, {
-      orderId,
-    });
+    const result = await neo4j.driver.executeQuery(query, where);
 
     const orders = result.records.map((record) => new Order(record.get(0)));
 

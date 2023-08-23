@@ -26,9 +26,31 @@ export class Sweet implements z.infer<typeof SweetSchema> {
     this.quantityInStock = quantityInStock;
   }
 
-  public static async find({ name }: { name: string }): Promise<Sweet[]> {
+  public static async find(where?: {
+    name?: string;
+    machineId?: string;
+    quantityLT?: number;
+  }): Promise<Sweet[]> {
+    const { machineId, ...whereProperties } = where || {};
+
     const query = `
-        MATCH (s:Sweet {name: $name}) 
+        MATCH (s:Sweet)${
+          machineId ? `<-[:PRODUCES]-(m:Machine {machineId: $machineId})` : ""
+        }
+        ${
+          Object.keys(whereProperties).length
+            ? `
+          WHERE
+            ${[
+              whereProperties.name ? `s.name = $name` : false,
+              whereProperties.quantityLT
+                ? `s.quantityInStock < $quantityLT`
+                : false,
+            ]
+              .filter(Boolean)
+              .join(" AND ")}`
+            : ""
+        } 
         RETURN {
             name: s.name,
             ingredients: s.ingredients,
@@ -37,9 +59,7 @@ export class Sweet implements z.infer<typeof SweetSchema> {
         }
       `;
 
-    const result = await neo4j.driver.executeQuery(query, {
-      name,
-    });
+    const result = await neo4j.driver.executeQuery(query, where);
 
     const sweets = result.records.map((record) => {
       const sweet = record.get(0);
@@ -71,29 +91,35 @@ export class Sweet implements z.infer<typeof SweetSchema> {
   }
 
   public static async connect({
-    from,
-    to,
+    sweet,
+    node,
     type,
+    direction,
   }: {
-    from: Sweet;
-    to: Machine | Order;
+    sweet: Sweet;
+    node: Machine | Order;
     type: string;
+    direction: "in" | "out";
   }): Promise<void> {
+    const inSrt = `${direction === "in" ? "<-" : "-"}`;
+    const outStr = `${direction === "out" ? "->" : "-"}`;
+
     const query = `
         MATCH (s:Sweet {name: $sweetName})
         ${
-          to instanceof Machine
-            ? `MATCH (to:Machine {machineId: $machineId})`
+          node instanceof Machine
+            ? `MATCH (n:Machine {machineId: $machineId})`
             : ""
         }
-        ${to instanceof Order ? `MATCH (to:Order {orderId: $orderId})` : ""}
-        CREATE (s)-[r:${type}]->(to)
+        ${node instanceof Order ? `MATCH (n:Order {orderId: $orderId})` : ""}
+
+        CREATE (s)${inSrt}[:${type}]${outStr}(n)
     `;
 
     await neo4j.driver.executeQuery(query, {
-      sweetName: from.name,
-      ...(to instanceof Machine ? { machineId: to.machineId } : {}),
-      ...(to instanceof Order ? { orderId: to.orderId } : {}),
+      sweetName: sweet.name,
+      ...(node instanceof Machine ? { machineId: node.machineId } : {}),
+      ...(node instanceof Order ? { orderId: node.orderId } : {}),
     });
   }
 }

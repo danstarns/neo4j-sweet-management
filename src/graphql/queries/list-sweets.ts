@@ -5,6 +5,18 @@ export type ListSweetsResponse = {
   sweets: Sweet[];
 };
 
+export type ListSweetsWhere = {
+  machineId?: string;
+  quantityLT?: number;
+};
+
+export const ListSweetsWhere = builder.inputType("ListSweetsWhere", {
+  fields: (t) => ({
+    machineId: t.string({ required: false }),
+    quantityLT: t.int({ required: false }),
+  }),
+});
+
 export const ListSweetsResponseObject = builder.objectType(
   "ListSweetsResponse",
   {
@@ -19,22 +31,22 @@ export const ListSweetsResponseObject = builder.objectType(
 builder.queryField("listSweets", (t) =>
   t.field({
     type: ListSweetsResponseObject,
-    resolve: () => {
+    args: {
+      where: t.arg({
+        type: ListSweetsWhere,
+        required: false,
+      }),
+    },
+    resolve: async (root, args) => {
+      const sweets = await Sweet.find({
+        ...(args.where?.machineId ? { machineId: args.where.machineId } : {}),
+        ...(args.where?.quantityLT
+          ? { quantityLT: args.where.quantityLT }
+          : {}),
+      });
+
       return {
-        sweets: [
-          {
-            name: "Chocolate Cake",
-            ingredients: ["chocolate", "flour", "eggs", "sugar"],
-            price: 10,
-            quantityInStock: 10,
-          },
-          {
-            name: "Vanilla Cake",
-            ingredients: ["vanilla", "flour", "eggs", "sugar"],
-            price: 10,
-            quantityInStock: 10,
-          },
-        ],
+        sweets,
       };
     },
   })

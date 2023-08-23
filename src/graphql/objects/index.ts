@@ -13,7 +13,12 @@ import {
   CreateSweetInput,
   CreateSweetResponse,
 } from "../mutations";
-import { ListOrdersResponse, ListSweetsResponse } from "../queries";
+import {
+  ListOrdersResponse,
+  ListOrdersWhere,
+  ListSweetsResponse,
+  ListSweetsWhere,
+} from "../queries";
 
 export * from "./sweet";
 export * from "./order";
@@ -22,8 +27,10 @@ export * from "./machine";
 export interface Objects {
   Sweet: Sweet;
   ListSweetsResponse: ListSweetsResponse;
+  ListSweetsWhere: ListSweetsWhere;
   Order: Order;
   ListOrdersResponse: ListOrdersResponse;
+  ListOrdersWhere: ListOrdersWhere;
   OrderStatusEnum: OrderStatusEnum;
   CreateOrderResponse: CreateOrderResponse;
   CreateOrderInput: CreateOrderInput;

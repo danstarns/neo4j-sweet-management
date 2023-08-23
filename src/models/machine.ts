@@ -36,7 +36,7 @@ export class Machine implements z.infer<typeof MachineSchema> {
     machineId: string;
   }): Promise<Machine[]> {
     const query = `
-        MATCH (m:${Machine.name} {machineId: $machineId})
+        MATCH (m:Machine {machineId: $machineId})
         RETURN {
             machineId: m.machineId,
             type: m.type,
@@ -58,7 +58,7 @@ export class Machine implements z.infer<typeof MachineSchema> {
     machine: Omit<z.infer<typeof MachineSchema>, "machineId">
   ): Promise<Machine> {
     const query = `
-        CREATE (m:${Machine.name}) 
+        CREATE (m:Machine) 
         SET m = $machine
         SET m.machineId = randomUUID()
         RETURN {

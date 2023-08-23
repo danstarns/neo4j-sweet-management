@@ -55,9 +55,10 @@ builder.mutationField("createOrder", (t) =>
       });
 
       await Sweet.connect({
-        from: sweets[0],
-        to: order,
+        sweet: sweets[0],
+        node: order,
         type: "CONTAINS",
+        direction: "in",
       });
 
       return {
