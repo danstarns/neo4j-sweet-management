@@ -56,6 +56,13 @@ builder.mutationField("addSweetToMachine", (t) =>
         throw new Error(`Machine ${args.input.machineId} not found`);
       }
 
+      await Sweet.connect({
+        sweet: sweets[0],
+        node: machines[0],
+        type: "PRODUCES",
+        direction: "in",
+      });
+
       return {
         sweet: sweets[0],
         machine: machines[0],

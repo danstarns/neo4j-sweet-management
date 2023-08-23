@@ -103,5 +103,8 @@ describe("Mutation addSweetToMachine", () => {
 
     expect(body.data.addSweetToMachine.sweet).toEqual(sweet);
     expect(body.data.addSweetToMachine.machine).toEqual(machine);
+
+    const foundSweets = await Sweet.find({ machineId: machine.machineId });
+    expect(foundSweets.length).toBe(1);
   });
 });

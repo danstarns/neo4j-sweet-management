@@ -101,5 +101,10 @@ describe("Mutation addSweetToOrder", () => {
 
     expect(body.data.addSweetToOrder.sweet).toEqual(sweet);
     expect(body.data.addSweetToOrder.order).toEqual(order);
+
+    const foundOders = await Order.find({
+      sweetName: sweet.name,
+    });
+    expect(foundOders.length).toEqual(1);
   });
 });
