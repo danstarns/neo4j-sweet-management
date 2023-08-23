@@ -6,8 +6,10 @@ export const builder = new SchemaBuilder<{
 }>({});
 
 builder.queryType({});
+builder.mutationType({});
 
 require("./queries");
+require("./mutations");
 require("./objects");
 
 export const schema = builder.toSchema();
