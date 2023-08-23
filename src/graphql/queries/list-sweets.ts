@@ -1,12 +1,12 @@
 import { Sweet } from "../../models/sweet";
 import { builder } from "../schema";
 
-export type ListSweetsResponseType = {
+export type ListSweetsResponse = {
   sweets: Sweet[];
 };
 
 export const ListSweetsResponseObject = builder.objectType(
-  "ListSweetsResponseType",
+  "ListSweetsResponse",
   {
     fields: (t) => ({
       sweets: t.expose("sweets", {

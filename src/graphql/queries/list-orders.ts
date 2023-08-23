@@ -1,12 +1,12 @@
 import { Order, OrderStatusEnum } from "../../models/order";
 import { builder } from "../schema";
 
-export type ListOrdersResponseType = {
+export type ListOrdersResponse = {
   orders: Order[];
 };
 
 export const ListOrdersResponseObject = builder.objectType(
-  "ListOrdersResponseType",
+  "ListOrdersResponse",
   {
     fields: (t) => ({
       orders: t.expose("orders", {
