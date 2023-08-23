@@ -1,10 +1,17 @@
+import { Machine } from "../../models/machine";
 import { Order, OrderStatusEnum } from "../../models/order";
 import { Sweet } from "../../models/sweet";
-import { CreateOrderInput, CreateOrderResponse } from "../mutations";
+import {
+  CreateMachineInput,
+  CreateMachineResponse,
+  CreateOrderInput,
+  CreateOrderResponse,
+} from "../mutations";
 import { ListOrdersResponse, ListSweetsResponse } from "../queries";
 
 export * from "./sweet";
 export * from "./order";
+export * from "./machine";
 
 export interface Objects {
   Sweet: Sweet;
@@ -14,4 +21,7 @@ export interface Objects {
   OrderStatusEnum: OrderStatusEnum;
   CreateOrderResponse: CreateOrderResponse;
   CreateOrderInput: CreateOrderInput;
+  Machine: Machine;
+  CreateMachineResponse: CreateMachineResponse;
+  CreateMachineInput: CreateMachineInput;
 }
