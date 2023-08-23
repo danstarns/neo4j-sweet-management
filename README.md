@@ -68,10 +68,31 @@ Now that the dependencies are installed, you can start the API.
 npm run dev
 ```
 
+```
+neo4j-sweet-management@1.0.0 dev
+> DEBUG="sweet:management" NODE_ENV=development ts-node ./src/index.ts
+
+  sweet:management Starting application +0ms
+  sweet:management Connecting to Neo4j +1ms
+  sweet:management Connected to Neo4j Server localhost:7687 +27ms
+  sweet:management Starting app +1ms
+  sweet:management Server Online  3000 +0ms
+  sweet:management GraphQL Playground: http://localhost:3000/graphql +0ms
+  sweet:management Application started +0ms
+```
+
+In dev you can use the GraphQL playground to test the API. You can access the playground at `http://localhost:3000/graphql`.
+
 ### Testing the API
 
 You can test the API by running the following command:
 
 ```bash
 npm run test
+```
+
+```
+Test Suites: 7 passed, 7 total
+Tests:       15 passed, 15 total
+Snapshots:   0 total
 ```
