@@ -25,7 +25,7 @@ export class Order implements z.infer<typeof OrderSchema> {
 
   public static async find({ orderId }: { orderId: string }): Promise<Order[]> {
     const query = `
-        MATCH (o:${Order.name} {orderId: $orderId})
+        MATCH (o:Order {orderId: $orderId})
         RETURN {
             orderId: o.orderId,
             customerName: o.customerName,

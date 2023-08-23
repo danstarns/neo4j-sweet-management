@@ -42,19 +42,29 @@ builder.mutationField("addSweetToOrder", (t) =>
         required: true,
       }),
     },
-    resolve: (root, args) => {
+    resolve: async (root, args) => {
+      const [sweets, orders] = await Promise.all([
+        Sweet.find({ name: args.input.sweetName }),
+        Order.find({ orderId: args.input.orderId }),
+      ]);
+
+      if (!sweets.length) {
+        throw new Error(`Sweet ${args.input.sweetName} not found`);
+      }
+
+      if (!orders.length) {
+        throw new Error(`Order ${args.input.orderId} not found`);
+      }
+
+      await Sweet.connect({
+        from: sweets[0],
+        to: orders[0],
+        type: "CONTAINS",
+      });
+
       return {
-        sweet: {
-          name: args.input.sweetName,
-          ingredients: ["cocoa", "sugar"],
-          price: 10,
-          quantityInStock: 100,
-        },
-        order: {
-          orderId: args.input.orderId,
-          status: "pending" as OrderStatusEnum,
-          customerName: "John Doe",
-        },
+        sweet: sweets[0],
+        order: orders[0],
       };
     },
   })
