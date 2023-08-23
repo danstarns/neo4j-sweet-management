@@ -5,4 +5,5 @@ module.exports = {
     "<rootDir>/dist/",
   ],
   testTimeout: 15000,
+  setupFilesAfterEnv: ["./setup-jest.js"],
 };
