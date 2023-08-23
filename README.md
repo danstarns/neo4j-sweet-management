@@ -11,11 +11,26 @@ The application contains the following entities:
 Consumers of the GraphQL API can perfom various operations on the entities such as:
 
 - Create a sweet
+  - [Source](./src/graphql/mutations/create-sweet.ts)
+  - [Test](./tests/mutations/create-sweet.test.ts)
 - Create a machine
+  - [Source](./src/graphql/mutations/create-machine.ts)
+  - [Test](./tests/mutations/create-machine.test.ts)
 - Create an order
+  - [Source](./src/graphql/mutations/create-order.ts)
+  - [Test](./tests/mutations/create-order.test.ts)
 - Add a sweet to a machine
-- Add an sweet to a order
+  - [Source](./src/graphql/mutations/add-sweet-to-machine.ts)
+  - [Test](./tests/mutations/add-sweet-to-machine.test.ts)
+- Add a sweet to a order
+  - [Source](./src/graphql/mutations/add-sweet-to-order.ts)
+  - [Test](./tests/mutations/add-sweet-to-order.test.ts)
 - List sweets
+  - [Source](./src/graphql/queries/list-sweets.ts)
+  - [Test](./tests/queries/list-sweets.test.ts)
+- List orders
+  - [Source](./src/graphql/queries/list-orders.ts)
+  - [Test](./tests/queries/list-orders.test.ts)
 
 Here is the data model for the application:
 
