@@ -1,4 +1,4 @@
-import { Machine, MachineStatusEnum } from "../../models/machine";
+import { Machine } from "../../models/machine";
 import { Sweet } from "../../models/sweet";
 import { builder } from "../schema";
 
@@ -42,20 +42,23 @@ builder.mutationField("addSweetToMachine", (t) =>
         required: true,
       }),
     },
-    resolve: (root, args) => {
+    resolve: async (root, args) => {
+      const [sweets, machines] = await Promise.all([
+        Sweet.find({ name: args.input.sweetName }),
+        Machine.find({ machineId: args.input.machineId }),
+      ]);
+
+      if (!sweets.length) {
+        throw new Error(`Sweet ${args.input.sweetName} not found`);
+      }
+
+      if (!machines.length) {
+        throw new Error(`Machine ${args.input.machineId} not found`);
+      }
+
       return {
-        sweet: {
-          name: args.input.sweetName,
-          ingredients: ["cocoa", "sugar"],
-          price: 10,
-          quantityInStock: 100,
-        },
-        machine: {
-          machineId: args.input.machineId,
-          type: "tosbiba",
-          capacity: 100,
-          status: "active" as MachineStatusEnum,
-        },
+        sweet: sweets[0],
+        machine: machines[0],
       };
     },
   })

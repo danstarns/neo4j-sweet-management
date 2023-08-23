@@ -4,6 +4,9 @@ import { faker } from "@faker-js/faker";
 import { Sweet } from "../../src/models/sweet";
 import { Machine } from "../../src/models/machine";
 import * as neo4j from "../../src/neo4j";
+import { promisify } from "util";
+
+const sleep = promisify(setTimeout);
 
 describe("Query listSweets", () => {
   beforeAll(async () => {
@@ -103,6 +106,8 @@ describe("Query listSweets", () => {
         });
       })
     );
+
+    await sleep(1000); // Lets backoff for all thoes promises to write
 
     const response = await request()
       .post("/graphql")
