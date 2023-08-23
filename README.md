@@ -1,10 +1,6 @@
 # neo4j-sweet-management
 
-This repo is for the Pynea backend challenge.
-
-- https://teampynea.notion.site/Backend-Hiring-Challenge-de26c804d8bb42e589dde964e044fa30
-
-It contains a Typescript, Node.js GraphQL server that uses a Neo4j database.
+This repo contains a Typescript, Node.js GraphQL server that uses a Neo4j database.
 
 The application contains the following entities:
 
@@ -12,7 +8,14 @@ The application contains the following entities:
 - Machines
 - Orders
 
-Consumers of the GraphQL API can perfom various operations on the entities as stated in the challenge document.
+Consumers of the GraphQL API can perfom various operations on the entities such as:
+
+- Create a sweet
+- Create a machine
+- Create an order
+- Add a sweet to a machine
+- Add an sweet to a order
+- List sweets
 
 Here is the data model for the application:
 
