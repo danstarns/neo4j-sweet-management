@@ -4,6 +4,8 @@ import { Sweet } from "../../models/sweet";
 import {
   AddSweetToMachineInput,
   AddSweetToMachineResponse,
+  AddSweetToOrderInput,
+  AddSweetToOrderResponse,
   CreateMachineInput,
   CreateMachineResponse,
   CreateOrderInput,
@@ -32,4 +34,6 @@ export interface Objects {
   CreateSweetResponse: CreateSweetResponse;
   AddSweetToMachineInput: AddSweetToMachineInput;
   AddSweetToMachineResponse: AddSweetToMachineResponse;
+  AddSweetToOrderInput: AddSweetToOrderInput;
+  AddSweetToOrderResponse: AddSweetToOrderResponse;
 }
