@@ -1,5 +1,5 @@
 import gql from "gql-tag";
-import { request } from "../../utils";
+import { request } from "../utils";
 
 describe("Query listSweets", () => {
   test("should return list of hardcoded sweets", async () => {

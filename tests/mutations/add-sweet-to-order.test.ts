@@ -1,5 +1,5 @@
 import gql from "gql-tag";
-import { request } from "../../utils";
+import { request } from "../utils";
 
 describe("Mutation addSweetToOrder", () => {
   test("should return sweet and order when adding sweet to order", async () => {

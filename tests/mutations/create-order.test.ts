@@ -1,5 +1,5 @@
 import gql from "gql-tag";
-import { request } from "../../utils";
+import { request } from "../utils";
 
 describe("Mutation createOrder", () => {
   test("should return hardcoded order when endpoint called", async () => {
