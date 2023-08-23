@@ -37,14 +37,15 @@ builder.mutationField("createMachine", (t) =>
         required: true,
       }),
     },
-    resolve: (root, args) => {
+    resolve: async (root, args) => {
+      const machine = await Machine.create({
+        type: args.input.type,
+        capacity: args.input.capacity,
+        status: "active" as MachineStatusEnum,
+      });
+
       return {
-        machine: {
-          machineId: "1",
-          type: args.input.type,
-          capacity: args.input.capacity,
-          status: "active" as MachineStatusEnum,
-        },
+        machine,
       };
     },
   })

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import * as neo4j from "../neo4j";
 
 export const MachineStatusEnumSchema = z.enum([
   "active",
@@ -27,5 +28,51 @@ export class Machine implements z.infer<typeof MachineSchema> {
     this.type = type;
     this.capacity = capacity;
     this.status = status;
+  }
+
+  public static async find({
+    machineId,
+  }: {
+    machineId: string;
+  }): Promise<Machine[]> {
+    const query = `
+        MATCH (m:${Machine.name} {machineId: $machineId})
+        RETURN {
+            machineId: m.machineId,
+            type: m.type,
+            capacity: m.capacity,
+            status: m.status
+        }
+    `;
+
+    const result = await neo4j.driver.executeQuery(query, {
+      machineId,
+    });
+
+    const machines = result.records.map((record) => new Machine(record.get(0)));
+
+    return machines;
+  }
+
+  public static async create(
+    machine: Omit<z.infer<typeof MachineSchema>, "machineId">
+  ): Promise<Machine> {
+    const query = `
+        CREATE (m:${Machine.name}) 
+        SET m = $machine
+        SET m.machineId = randomUUID()
+        RETURN {
+            machineId: m.machineId,
+            type: m.type,
+            capacity: m.capacity,
+            status: m.status
+        }
+      `;
+
+    const result = await neo4j.driver.executeQuery(query, {
+      machine,
+    });
+
+    return new Machine(result.records[0].get(0));
   }
 }
