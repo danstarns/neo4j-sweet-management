@@ -2,6 +2,8 @@ import { Machine } from "../../models/machine";
 import { Order, OrderStatusEnum } from "../../models/order";
 import { Sweet } from "../../models/sweet";
 import {
+  AddSweetToMachineInput,
+  AddSweetToMachineResponse,
   CreateMachineInput,
   CreateMachineResponse,
   CreateOrderInput,
@@ -28,4 +30,6 @@ export interface Objects {
   CreateMachineInput: CreateMachineInput;
   CreateSweetInput: CreateSweetInput;
   CreateSweetResponse: CreateSweetResponse;
+  AddSweetToMachineInput: AddSweetToMachineInput;
+  AddSweetToMachineResponse: AddSweetToMachineResponse;
 }
