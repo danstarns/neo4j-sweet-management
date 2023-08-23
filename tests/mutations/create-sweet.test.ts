@@ -40,7 +40,7 @@ describe("Mutation createSweet", () => {
       quantityInStock: faker.number.int({ min: 1, max: 1000 }),
     };
 
-    const sweet = await Sweet.create(variables);
+    await Sweet.create(variables);
 
     const response = await request()
       .post("/graphql")
@@ -76,9 +76,9 @@ describe("Mutation createSweet", () => {
     const body = await response.body;
     expect(body.errors).toBeUndefined();
 
+    expect(body.data.createSweet.sweet).toEqual(variables);
+
     const foundSweets = await Sweet.find({ where: { name: variables.name } });
     expect(foundSweets).toHaveLength(1);
-
-    expect(body.data.createSweet.sweet).toEqual(variables);
   });
 });

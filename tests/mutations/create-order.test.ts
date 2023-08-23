@@ -75,9 +75,9 @@ describe("Mutation createOrder", () => {
       variables.customerName
     );
 
-    const foundOrder = await Order.find({
+    const foundOrders = await Order.find({
       orderId: body.data.createOrder.order.orderId,
     });
-    expect(foundOrder.length).toEqual(1);
+    expect(foundOrders.length).toEqual(1);
   });
 });
