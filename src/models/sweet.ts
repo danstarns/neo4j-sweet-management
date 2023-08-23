@@ -8,7 +8,6 @@ export const SweetSchema = z.object({
   ingredients: z.array(z.string()),
   price: z.number(),
   quantityInStock: z.number(),
-  machine: MachineSchema.optional(),
 });
 
 export class Sweet implements z.infer<typeof SweetSchema> {
