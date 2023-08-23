@@ -6,6 +6,8 @@ import {
   CreateMachineResponse,
   CreateOrderInput,
   CreateOrderResponse,
+  CreateSweetInput,
+  CreateSweetResponse,
 } from "../mutations";
 import { ListOrdersResponse, ListSweetsResponse } from "../queries";
 
@@ -24,4 +26,6 @@ export interface Objects {
   Machine: Machine;
   CreateMachineResponse: CreateMachineResponse;
   CreateMachineInput: CreateMachineInput;
+  CreateSweetInput: CreateSweetInput;
+  CreateSweetResponse: CreateSweetResponse;
 }
