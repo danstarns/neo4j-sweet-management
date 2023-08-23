@@ -26,12 +26,26 @@ export class Order implements z.infer<typeof OrderSchema> {
   public static async find(where?: {
     orderId?: string;
     sweetName?: string;
+    status?: OrderStatusEnum;
   }): Promise<Order[]> {
+    const { sweetName, ...whereProperties } = where || {};
+
     const query = `
         MATCH (o:Order)${
-          where?.sweetName ? `-[:CONTAINS]->(s:Sweet {name: $sweetName})` : ""
+          sweetName ? `-[:CONTAINS]->(s:Sweet {name: $sweetName})` : ""
         }
-        ${where?.orderId ? `WHERE o.orderId = $orderId` : ""}
+        ${
+          Object.keys(whereProperties).length
+            ? `
+          WHERE
+            ${[
+              whereProperties.orderId ? `o.orderId = $orderId` : false,
+              whereProperties.status ? `o.status = $status` : false,
+            ]
+              .filter(Boolean)
+              .join(" AND ")}`
+            : ""
+        } 
         RETURN {
             orderId: o.orderId,
             customerName: o.customerName,
