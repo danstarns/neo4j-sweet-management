@@ -78,7 +78,7 @@ describe("Mutation createSweet", () => {
 
     expect(body.data.createSweet.sweet).toEqual(variables);
 
-    const foundSweets = await Sweet.find({ where: { name: variables.name } });
+    const foundSweets = await Sweet.find({ name: variables.name });
     expect(foundSweets).toHaveLength(1);
   });
 });

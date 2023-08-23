@@ -26,11 +26,7 @@ export class Sweet implements z.infer<typeof SweetSchema> {
     this.quantityInStock = quantityInStock;
   }
 
-  public static async find({
-    where,
-  }: {
-    where: { name: string };
-  }): Promise<Sweet[]> {
+  public static async find({ name }: { name: string }): Promise<Sweet[]> {
     const query = `
         MATCH (s:Sweet {name: $name}) 
         RETURN {
@@ -42,7 +38,7 @@ export class Sweet implements z.infer<typeof SweetSchema> {
       `;
 
     const result = await neo4j.driver.executeQuery(query, {
-      name: where.name,
+      name,
     });
 
     const sweets = result.records.map((record) => {
@@ -78,12 +74,10 @@ export class Sweet implements z.infer<typeof SweetSchema> {
     from,
     to,
     type,
-    properties,
   }: {
     from: Sweet;
     to: Machine | Order;
     type: string;
-    properties?: Record<string, any>;
   }): Promise<void> {
     const query = `
         MATCH (s:Sweet {name: $sweetName})
@@ -94,14 +88,12 @@ export class Sweet implements z.infer<typeof SweetSchema> {
         }
         ${to instanceof Order ? `MATCH (to:Order {orderId: $orderId})` : ""}
         CREATE (s)-[r:${type}]->(to)
-        ${properties ? "SET r = $properties" : ""}
     `;
 
     await neo4j.driver.executeQuery(query, {
       sweetName: from.name,
       ...(to instanceof Machine ? { machineId: to.machineId } : {}),
       ...(to instanceof Order ? { orderId: to.orderId } : {}),
-      ...(properties ? { properties } : {}),
     });
   }
 }

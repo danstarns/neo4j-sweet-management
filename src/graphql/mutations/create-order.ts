@@ -41,13 +41,11 @@ builder.mutationField("createOrder", (t) =>
       }),
     },
     resolve: async (root, args) => {
-      const sweet = await Sweet.find({
-        where: {
-          name: args.input.sweetName,
-        },
+      const sweets = await Sweet.find({
+        name: args.input.sweetName,
       });
 
-      if (!sweet.length) {
+      if (!sweets.length) {
         throw new Error(`Sweet ${args.input.sweetName} not found`);
       }
 
@@ -57,12 +55,9 @@ builder.mutationField("createOrder", (t) =>
       });
 
       await Sweet.connect({
-        from: sweet[0],
+        from: sweets[0],
         to: order,
         type: "CONTAINS",
-        properties: {
-          quantity: args.input.quantity,
-        },
       });
 
       return {

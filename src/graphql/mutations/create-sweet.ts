@@ -42,10 +42,8 @@ builder.mutationField("createSweet", (t) =>
       }),
     },
     resolve: async (root, args) => {
-      const existingSweets = await Sweet.find({
-        where: { name: args.input.name },
-      });
-      if (existingSweets.length > 0) {
+      const sweets = await Sweet.find({ name: args.input.name });
+      if (sweets.length > 0) {
         throw new Error(`Sweet with name ${args.input.name} already exists`);
       }
 
