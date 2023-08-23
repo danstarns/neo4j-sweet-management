@@ -1,6 +1,6 @@
 import { z } from "zod";
 import * as neo4j from "../neo4j";
-import { Machine } from "./machine";
+import { Machine, MachineSchema } from "./machine";
 import { Order } from "./order";
 
 export const SweetSchema = z.object({
@@ -8,6 +8,7 @@ export const SweetSchema = z.object({
   ingredients: z.array(z.string()),
   price: z.number(),
   quantityInStock: z.number(),
+  machine: MachineSchema.optional(),
 });
 
 export class Sweet implements z.infer<typeof SweetSchema> {

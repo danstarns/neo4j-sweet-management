@@ -30,13 +30,25 @@ export class Machine implements z.infer<typeof MachineSchema> {
     this.status = status;
   }
 
-  public static async find({
-    machineId,
-  }: {
-    machineId: string;
+  public static async find(where?: {
+    machineId?: string;
+    sweetName?: string;
   }): Promise<Machine[]> {
+    const { sweetName, ...whereProperties } = where || {};
+
     const query = `
-        MATCH (m:Machine {machineId: $machineId})
+        MATCH (m:Machine)${
+          sweetName ? `-[:PRODUCES]->(s:Sweet {name: $sweetName})` : ""
+        }
+        ${
+          Object.keys(whereProperties).length
+            ? `
+          WHERE
+            ${[whereProperties.machineId ? `m.machineId = $machineId` : false]
+              .filter(Boolean)
+              .join(" AND ")}`
+            : ""
+        }
         RETURN {
             machineId: m.machineId,
             type: m.type,
@@ -45,9 +57,7 @@ export class Machine implements z.infer<typeof MachineSchema> {
         }
     `;
 
-    const result = await neo4j.driver.executeQuery(query, {
-      machineId,
-    });
+    const result = await neo4j.driver.executeQuery(query, where);
 
     const machines = result.records.map((record) => new Machine(record.get(0)));
 
