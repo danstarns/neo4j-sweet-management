@@ -1,9 +1,10 @@
 import { Order, OrderStatusEnum } from "../../models/order";
+import { Sweet } from "../../models/sweet";
 import { builder } from "../schema";
 
 export type CreateOrderInput = {
-  userEmail: string;
-  sweetName: string;
+  customerName: string;
+  sweetNames: string[];
   quantity: number;
 };
 
@@ -13,7 +14,7 @@ export type CreateOrderResponse = {
 
 const CreateOrderInput = builder.inputType("CreateOrderInput", {
   fields: (t) => ({
-    userEmail: t.string({ required: true }),
+    customerName: t.string({ required: true }),
     sweetName: t.string({ required: true }),
     quantity: t.int({ required: true }),
   }),
@@ -39,13 +40,33 @@ builder.mutationField("createOrder", (t) =>
         required: true,
       }),
     },
-    resolve: () => {
-      return {
-        order: {
-          orderId: "1",
-          customerName: "John Doe",
-          status: "pending" as OrderStatusEnum,
+    resolve: async (root, args) => {
+      const sweet = await Sweet.find({
+        where: {
+          name: args.input.sweetName,
         },
+      });
+
+      if (!sweet.length) {
+        throw new Error(`Sweet ${args.input.sweetName} not found`);
+      }
+
+      const order = await Order.create({
+        customerName: args.input.customerName,
+        status: "pending",
+      });
+
+      await Sweet.connect({
+        from: sweet[0],
+        to: order,
+        type: "CONTAINS",
+        properties: {
+          quantity: args.input.quantity,
+        },
+      });
+
+      return {
+        order,
       };
     },
   })

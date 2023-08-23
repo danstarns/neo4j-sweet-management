@@ -78,10 +78,12 @@ export class Sweet implements z.infer<typeof SweetSchema> {
     from,
     to,
     type,
+    properties,
   }: {
     from: Sweet;
     to: Machine | Order;
     type: string;
+    properties?: Record<string, any>;
   }): Promise<void> {
     const query = `
         MATCH (s:Sweet {name: $sweetName})
@@ -91,14 +93,15 @@ export class Sweet implements z.infer<typeof SweetSchema> {
             : ""
         }
         ${to instanceof Order ? `MATCH (to:Order {orderId: $orderId})` : ""}
-        MATCH (m:Machine {machineId: $machineId})
         CREATE (s)-[r:${type}]->(to)
+        ${properties ? "SET r = $properties" : ""}
     `;
 
     await neo4j.driver.executeQuery(query, {
       sweetName: from.name,
       ...(to instanceof Machine ? { machineId: to.machineId } : {}),
       ...(to instanceof Order ? { orderId: to.orderId } : {}),
+      ...(properties ? { properties } : {}),
     });
   }
 }
